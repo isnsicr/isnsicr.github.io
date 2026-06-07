@@ -30,23 +30,32 @@
     </main>
   </div>
   <script>
-    const files = Array.from({length:13}, (_, i) => `krespel-councillor.files/part-${String(i + 1).padStart(2, "0")}.txt`);
-    (async () => {
-      const text = (await Promise.all(files.map(async file => {
-        const response = await fetch(file);
-        if (!response.ok) throw new Error(file);
-        return await response.text();
-      }))).join("");
+    const files = [
+      "クレスペル顧問官.files/part-01.html",
+      "クレスペル顧問官.files/part-02.html",
+      "クレスペル顧問官.files/part-03.html",
+      "クレスペル顧問官.files/part-04.html",
+      "クレスペル顧問官.files/part-05.html",
+      "クレスペル顧問官.files/part-06.html"
+    ];
+    async function loadText(){
       const target = document.getElementById("content");
       target.textContent = "";
       target.classList.remove("loading");
-      for (const block of text.split(/\n\n+/)) {
-        if (!block.trim()) continue;
-        const p = document.createElement("p");
-        p.textContent = block;
-        target.appendChild(p);
+      for (const file of files){
+        const response = await fetch(file);
+        const source = await response.text();
+        const pieces = source.replaceAll("<p>", "").split("</p>");
+        for (const piece of pieces){
+          const text = piece.trim();
+          if (!text) continue;
+          const paragraph = document.createElement("p");
+          paragraph.textContent = text;
+          target.appendChild(paragraph);
+        }
       }
-    })().catch(() => {
+    }
+    loadText().catch(function(){
       document.getElementById("content").textContent = "本文を読み込めませんでした。";
     });
   </script>
