@@ -55,9 +55,11 @@ p.title-line {
 p.author-gap-1 {
   margin-top: 0mm;
   margin-right: 10.5pt;
-  margin-bottom: 8.5pt !important;
+  margin-bottom: 0mm;
   margin-left: 0mm;
-  text-align: right;
+  text-align: end;
+  padding-bottom: 8.5pt;
+  box-sizing: border-box;
 }
 
 #content > p {
@@ -65,7 +67,7 @@ p.author-gap-1 {
   margin: 0mm;
 }
 
-p[align="right"] {
+p[align="right"]:not(.author-gap-1) {
   text-align: start;
 }
 
