@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Archive</title>
+  <meta name="description" content="Archive">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f5f1ea;
+      --panel:rgba(255,255,255,0.34);
+      --text:#151515;
+      --muted:#6f6a63;
+      --line:rgba(21,21,21,0.14);
+      --line-strong:rgba(21,21,21,0.28);
+      --shadow:0 24px 80px rgba(0,0,0,0.08);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;}
+    body{
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.8), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(255,255,255,0.55), transparent 28%),
+        linear-gradient(180deg, #f7f4ef 0%, #f1ece4 100%);
+      color:var(--text);
+      font-family:"Noto Serif JP", serif;
+      overflow:hidden;
+    }
+    body::before, body::after{
+      content:"";position:fixed;inset:20px;pointer-events:none;border:1px solid var(--line);
+    }
+    body::after{inset:32px;border-color:rgba(21,21,21,0.08);}
+    .stage{min-height:100%;display:grid;place-items:center;padding:64px 28px;position:relative;}
+    .corner{position:fixed;font-family:"Inter", sans-serif;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);opacity:0.9;user-select:none;}
+    .corner.tl{top:42px;left:46px}.corner.tr{top:42px;right:46px}.corner.bl{bottom:42px;left:46px}.corner.br{bottom:42px;right:46px}
+    .panel{width:min(720px, calc(100vw - 96px));background:var(--panel);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);box-shadow:var(--shadow);position:relative;}
+    .panel::before,.panel::after{content:"";position:absolute;inset:14px;border:1px solid rgba(21,21,21,0.08);pointer-events:none;}
+    .panel::after{inset:auto 14px 14px 14px;height:1px;border:none;background:linear-gradient(90deg, transparent, var(--line), transparent);}
+    nav{padding:48px 36px;}
+    ul{list-style:none;margin:0;padding:0;}
+    li + li{margin-top:10px;}
+    a{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:18px 2px;color:inherit;text-decoration:none;border-top:1px solid var(--line);transition:transform 0.22s ease,padding-left 0.22s ease,border-color 0.22s ease,opacity 0.22s ease;}
+    li:first-child a{border-top:1px solid var(--line-strong);}
+    li:last-child a{border-bottom:1px solid var(--line-strong);}
+    .label{font-size:clamp(1.05rem, 2.4vw, 1.55rem);line-height:1.5;letter-spacing:0.03em;}
+    .meta{font-family:"Inter", sans-serif;font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+    a:hover{transform:translateX(6px);padding-left:10px;border-color:var(--line-strong);}
+    a:hover .meta{color:var(--text);}
+    @media (max-width: 720px){
+      body{overflow:auto}
+      body::before{inset:12px}
+      body::after{inset:20px}
+      .corner{font-size:10px;}
+      .corner.tl{top:26px;left:28px}.corner.tr{top:26px;right:28px}.corner.bl{bottom:26px;left:28px}.corner.br{bottom:26px;right:28px}
+      .panel{width:min(100%, calc(100vw - 48px));}
+      nav{padding:34px 22px;}
+      a{grid-template-columns:1fr;gap:6px;padding:16px 0;}
+      .meta{white-space:normal;}
+    }
+  </style>
+</head>
+<body>
+  <div class="corner tl">Archive</div>
+  <div class="corner tr">Index</div>
+  <div class="corner bl">Texts</div>
+  <div class="corner br">Static</div>
+  <main class="stage">
+    <section class="panel" aria-label="links">
+      <nav>
+        <ul>
+          <li><a href="html/アッシャー家の崩壊utf8.htm"><span class="label">「アッシャー家の崩壊」</span><span class="meta">HTML</span></a></li>
+          <li><a href="pdf/アッシャー家の崩壊.pdf" target="_blank" rel="noopener"><span class="label">「アッシャー家の崩壊」PDF</span><span class="meta">Open</span></a></li>
+          <li><a href="simply-static-1-1772326567/index.html"><span class="label">旧サイト</span><span class="meta">Archive</span></a></li>
+        </ul>
+      </nav>
+    </section>
+  </main>
+</body>
+</html>
