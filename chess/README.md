@@ -12,6 +12,9 @@ iPhone / GitHub Pages 向けのオフライン対応チェス解析UIです。
 - 「1手戻る」「初期局面」で着手履歴を戻す
 - 白駒・黒駒を明示的な色で表示
 - タップで「駒 → 移動先」を選ぶ操作（iPhone向け）
+- UI内の着手履歴をStockfish Searchへ渡し、三fold repetitionを探索に反映
+- 50手/75手、三fold/五fold、デッドポジション、ステイルメイトを別枠表示
+- HCE補間後寄与を正負の横棒グラフで表示
 - 合法手判定はStockfish 16で実施
 - Service WorkerでUIをオフライン化
 - 「エンジンをオフライン保存」を一度実行するとStockfish 19とStockfish 16もCache Storageに保存
