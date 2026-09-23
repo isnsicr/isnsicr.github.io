@@ -9,6 +9,8 @@ iPhone / GitHub Pages 向けのオフライン対応チェス解析UIです。
 - `Δ = Search - Classical`（白視点）
 - MultiPV候補手
 - FEN入力、盤面反転
+- 「1手戻る」「初期局面」で着手履歴を戻す
+- 白駒・黒駒を明示的な色で表示
 - タップで「駒 → 移動先」を選ぶ操作（iPhone向け）
 - 合法手判定はStockfish 16で実施
 - Service WorkerでUIをオフライン化
