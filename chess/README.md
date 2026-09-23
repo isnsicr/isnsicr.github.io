@@ -15,6 +15,8 @@ iPhone / GitHub Pages 向けのオフライン対応チェス解析UIです。
 - UI内の着手履歴をStockfish Searchへ渡し、三fold repetitionを探索に反映
 - 50手/75手、三fold/五fold、デッドポジション、ステイルメイトを別枠表示
 - HCE補間後寄与を正負の横棒グラフで表示
+- Coverage表示: 各マスへの白/黒の擬似攻撃枚数を緑/赤で可視化（ピン等は無視）
+- 着手確定後にStockfish解析を自動実行
 - 合法手判定はStockfish 16で実施
 - Service WorkerでUIをオフライン化
 - 「エンジンをオフライン保存」を一度実行するとStockfish 19とStockfish 16もCache Storageに保存
