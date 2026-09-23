@@ -1,0 +1,54 @@
+name: Vendor chess engines
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/vendor-chess-engines.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Download Stockfish.js packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p chess/engine
+          tmp="$(mktemp -d)"
+
+          cd "$tmp"
+          npm pack stockfish@19.0.0 --silent
+          mkdir sf19
+          tar -xzf stockfish-19.0.0.tgz -C sf19
+          cp sf19/package/bin/stockfish-19-lite-single.js "$GITHUB_WORKSPACE/chess/engine/"
+          cp sf19/package/bin/stockfish-19-lite-single.wasm "$GITHUB_WORKSPACE/chess/engine/"
+
+          npm pack stockfish@16.0.0 --silent
+          mkdir sf16
+          tar -xzf stockfish-16.0.0.tgz -C sf16
+          cp sf16/package/src/stockfish-nnue-16-single.js "$GITHUB_WORKSPACE/chess/engine/"
+          cp sf16/package/src/stockfish-nnue-16-single.wasm "$GITHUB_WORKSPACE/chess/engine/"
+
+      - name: Commit vendored engines
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add chess/engine
+          if git diff --cached --quiet; then
+            echo "Engine files are already current."
+            exit 0
+          fi
+          git commit -m "Vendor Stockfish browser engines"
+          git push
