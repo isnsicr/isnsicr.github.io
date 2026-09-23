@@ -1,4 +1,4 @@
-const CACHE='chess-eval-shell-v6';
+const CACHE='chess-eval-shell-v7';
 const SHELL=['./','./index.html'];
 
 self.addEventListener('install',event=>{
