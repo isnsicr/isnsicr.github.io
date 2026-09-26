@@ -22,6 +22,8 @@ iPhone / GitHub Pages 向けのオフライン対応チェス解析UIです。
 - アンパッサン可能時は、斜め前の到達マスに加えて実際に取られる横隣の敵ポーンのマスもcoverageに加算
 - ダークモードを無効化し、常にライト配色を使用
 - 着手確定後にStockfish解析を自動実行
+- 候補手がない場合はチェックメイト、ステイルメイト、ドロー等の理由を表示
+- Stockfish 19の現在局面評価を白/黒の横棒グラフで表示
 - 合法手判定はStockfish 16で実施
 - Service WorkerでUIをオフライン化
 - 「エンジンをオフライン保存」を一度実行するとStockfish 19とStockfish 16もCache Storageに保存
