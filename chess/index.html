@@ -198,7 +198,11 @@ function rawStandardCoverageCount(b,sq,color){
     if(z!==color||from===sq)return;
     a=sqxy(from);c=sqxy(sq);dx=c[0]-a[0];dy=c[1]-a[1];
     if(t==='p')geom=dy===(z==='w'?1:-1)&&Math.abs(dx)===1;
-    else if(t==='n')geom=(Math.abs(dx)===1&&Math.abs(dy)===2)||(Math.abs(dx)===2&&Math.abs(dy)===1)||rawKnightTwoHopCovers(b,from,sq,color);
+    else if(t==='n'){
+      if((Math.abs(dx)===1&&Math.abs(dy)===2)||(Math.abs(dx)===2&&Math.abs(dy)===1))
+        geom=legalCoverageAfterTargetTaken(b,from,sq,color);
+      else if(rawKnightTwoHopCovers(b,from,sq,color)){n++;return}
+    }
     else if(t==='k')geom=Math.max(Math.abs(dx),Math.abs(dy))===1;
     else if((t==='r'&&(dx===0||dy===0))||(t==='b'&&Math.abs(dx)===Math.abs(dy))||(t==='q'&&(dx===0||dy===0||Math.abs(dx)===Math.abs(dy)))){
       steps=Math.max(Math.abs(dx),Math.abs(dy));clear=true;
