@@ -18,7 +18,7 @@ iPhone / GitHub Pages 向けのオフライン対応チェス解析UIです。
 - Coverage表示: 両方 / 白のみ / 黒のみ / OFF を切替。各マスへの擬似攻撃枚数を可視化（ピン等は無視）
 - Coverageを見やすくするため盤面のベース色を淡色化
 - Coverageでは絶対ピンはピン線上のみ有効。相対ピンはピン線上に加え、背後で守る味方駒より高価な敵駒への攻撃coverageも有効
-- 自分のキングをチェック状態に残す・さらす手、キングが攻撃マスへ入る手など、規則上非合法な手由来のcoverageは無効
+- coverageの合法性は、coverage先の駒が取られた後に取り返す局面で判定。自玉を危険にする取り返しはcoverageに数えない
 - 敵駒が斜線上で手前から強→弱と並ぶ場合は奥の弱い駒までpressureを継続。味方駒は原則として斜線を遮断し、同一直線のスライダーによるバッテリーだけ貫通して重複加算
 - アンパッサン可能時は、斜め前の到達マスに加えて実際に取られる横隣の敵ポーンのマスもcoverageに加算
 - ダークモードを無効化し、常にライト配色を使用
@@ -44,3 +44,5 @@ Stockfish 16と19ではcentipawn評価の校正が完全に同一ではないた
 - Stockfish.js 19: https://github.com/nmrugg/stockfish.js
 - Stockfish.js 16 / npm package 16.0.0: https://www.npmjs.com/package/stockfish/v/16.0.0
 - Stockfish: GPLv3
+
+- 相対ピンでは、背後の保護駒より高価な敵駒へのcoverageに加え、敵の後続駒が敵側から合法にcoverageされている交換列でもcoverageを維持
