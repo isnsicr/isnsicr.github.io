@@ -145,41 +145,31 @@ function rearEnemyOnRay(b,from,to,enemyColor){
   }
   return null;
 }
-function rawStandardCoverageCount(b,sq,color,ignoreFrom){
-  var n=0,save;
-  if(ignoreFrom&&b[ignoreFrom]){save=b[ignoreFrom];delete b[ignoreFrom]}
+function rawStandardCoverageCount(b,sq,color){
+  var n=0;
   Object.keys(b).forEach(function(from){
-    var pc=b[from],z=pieceColor(pc),t=pc.toLowerCase(),a,c,dx,dy,steps,i,to,clear;
+    var pc=b[from],z=pieceColor(pc),t=pc.toLowerCase(),a,c,dx,dy,steps,i,to,clear,geom=false;
     if(z!==color||from===sq)return;
     a=sqxy(from);c=sqxy(sq);dx=c[0]-a[0];dy=c[1]-a[1];
-    if(t==='p'){
-      if(dy===(z==='w'?1:-1)&&Math.abs(dx)===1)n++;
-      return;
+    if(t==='p')geom=dy===(z==='w'?1:-1)&&Math.abs(dx)===1;
+    else if(t==='n')geom=(Math.abs(dx)===1&&Math.abs(dy)===2)||(Math.abs(dx)===2&&Math.abs(dy)===1);
+    else if(t==='k')geom=Math.max(Math.abs(dx),Math.abs(dy))===1;
+    else if((t==='r'&&(dx===0||dy===0))||(t==='b'&&Math.abs(dx)===Math.abs(dy))||(t==='q'&&(dx===0||dy===0||Math.abs(dx)===Math.abs(dy)))){
+      steps=Math.max(Math.abs(dx),Math.abs(dy));clear=true;
+      for(i=1;i<steps;i++){
+        to=squareAt(a[0]+Math.sign(dx)*i,a[1]+Math.sign(dy)*i);
+        if(b[to]){clear=false;break}
+      }
+      geom=clear;
     }
-    if(t==='n'){
-      if((Math.abs(dx)===1&&Math.abs(dy)===2)||(Math.abs(dx)===2&&Math.abs(dy)===1))n++;
-      return;
-    }
-    if(t==='k'){
-      if(Math.max(Math.abs(dx),Math.abs(dy))===1)n++;
-      return;
-    }
-    if(!((t==='r'&&(dx===0||dy===0))||(t==='b'&&Math.abs(dx)===Math.abs(dy))||(t==='q'&&(dx===0||dy===0||Math.abs(dx)===Math.abs(dy)))))return;
-    steps=Math.max(Math.abs(dx),Math.abs(dy));clear=true;
-    for(i=1;i<steps;i++){
-      to=squareAt(a[0]+Math.sign(dx)*i,a[1]+Math.sign(dy)*i);
-      if(b[to]){clear=false;break}
-    }
-    if(clear)n++;
+    if(geom&&legalCoverageAfterTargetTaken(b,from,sq,color))n++;
   });
-  if(save)b[ignoreFrom]=save;
   return n;
 }
 function rearEnemySupported(b,from,to,attackerColor){
-  var enemy=attackerColor==='w'?'b':'w',rear=rearEnemyOnRay(b,from,to,enemy),copy;
+  var enemy=attackerColor==='w'?'b':'w',rear=rearEnemyOnRay(b,from,to,enemy);
   if(!rear)return false;
-  copy=cloneBoard(b);
-  return rawStandardCoverageCount(copy,rear.sq,enemy,rear.sq)>0;
+  return rawStandardCoverageCount(b,rear.sq,enemy)>0;
 }
 function allowedByPin(pin,b,from,to,attackerColor,dx,dy){
   var target;
