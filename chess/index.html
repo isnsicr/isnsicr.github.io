@@ -104,63 +104,53 @@ function frozenKnightIntermediateBoard(b,from,to,color){
   if(k&&standardAttacked(nb,k,color==='w'?'b':'w'))return null;
   return nb;
 }
-function knightForkCountAfterMove(b,from,to,color){
-  var pc=b[from],nb,xy,count=0,enemy=color==='w'?'b':'w',target;
-  if(!pc||pc.toLowerCase()!=='n')return 0;
-  target=b[to];
-  if(target&&pieceColor(target)===color)return 0;
-  nb=cloneBoard(b);
-  delete nb[to];delete nb[from];nb[to]=pc;
-  xy=sqxy(to);
+function knightForkTargets(b,from,color,pin){
+  var targets=[],xy=sqxy(from),enemy=color==='w'?'b':'w';
   KNIGHT_DIRS.forEach(function(d){
-    var sq=squareAt(xy[0]+d[0],xy[1]+d[1]),epc=sq&&nb[sq];
-    if(epc&&pieceColor(epc)===enemy&&legalCoverageAfterTargetTaken(nb,to,sq,color))count++;
+    var sq=squareAt(xy[0]+d[0],xy[1]+d[1]),pc=sq&&b[sq];
+    if(!pc||pieceColor(pc)!==enemy)return;
+    if(!allowedByPin(pin,b,from,sq,color,d[0],d[1]))return;
+    if(!legalCoverageAfterTargetTaken(b,from,sq,color))return;
+    targets.push(sq);
   });
-  return count;
+  return targets.length>=2?targets:[];
 }
 function knightCoverageTargets(b,from,color,pin){
   var one={},two={},a=sqxy(from);
   KNIGHT_DIRS.forEach(function(d){
-    var mid=squareAt(a[0]+d[0],a[1]+d[1]),nb,pin2,mxy;
+    var mid=squareAt(a[0]+d[0],a[1]+d[1]),nb,pin2,forkTargets;
     if(!mid)return;
 
-    // Ordinary one-move coverage.
+    // Ordinary one-move coverage from the current square.
     if(allowedByPin(pin,b,from,mid,color,d[0],d[1])&&legalCoverageAfterTargetTaken(b,from,mid,color))
       one[mid]=true;
 
-    // Two-move coverage: no opponent reply is simulated. Starting from the
-    // current position, move only this knight twice in succession (removing
-    // a captured piece only when the knight itself captures it). The second
-    // landing square counts only if it produces a legal fork.
+    // "Two-move" coverage means: move this knight once, with no opponent
+    // reply, then look at the enemy pieces forked from that landing square.
+    // The forked enemy squares themselves are added as the two-move coverage.
     if(!allowedByPin(pin,b,from,mid,color,d[0],d[1]))return;
     nb=frozenKnightIntermediateBoard(b,from,mid,color);
     if(!nb)return;
     pin2=pinnedCoveragePieces(nb)[mid]||null;
-    mxy=sqxy(mid);
-    KNIGHT_DIRS.forEach(function(d2){
-      var end=squareAt(mxy[0]+d2[0],mxy[1]+d2[1]);
-      if(!end||end===from)return;
-      if(knightForkCountAfterMove(nb,mid,end,color)<2)return;
-      if(!allowedByPin(pin2,nb,mid,end,color,d2[0],d2[1]))return;
-      if(!legalCoverageAfterTargetTaken(nb,mid,end,color))return;
-      two[end]=true;
-    });
+    forkTargets=knightForkTargets(nb,mid,color,pin2);
+    forkTargets.forEach(function(sq){two[sq]=true});
   });
   return{one:one,two:two};
 }
 function rawKnightTwoHopCovers(b,from,target,color){
   var a=sqxy(from),hit=false;
   KNIGHT_DIRS.some(function(d){
-    var mid=squareAt(a[0]+d[0],a[1]+d[1]),nb,mxy;
+    var mid=squareAt(a[0]+d[0],a[1]+d[1]),nb,mxy,targets=[];
     if(!mid)return false;
     nb=frozenKnightIntermediateBoard(b,from,mid,color);
     if(!nb)return false;
     mxy=sqxy(mid);
-    return KNIGHT_DIRS.some(function(d2){
-      var end=squareAt(mxy[0]+d2[0],mxy[1]+d2[1]);
-      if(end===target&&end!==from&&legalCoverageAfterTargetTaken(nb,mid,end,color)&&knightForkCountAfterMove(nb,mid,end,color)>=2){hit=true;return true}
-      return false;
+    KNIGHT_DIRS.forEach(function(d2){
+      var sq=squareAt(mxy[0]+d2[0],mxy[1]+d2[1]),pc=sq&&nb[sq];
+      if(pc&&pieceColor(pc)!==color&&legalCoverageAfterTargetTaken(nb,mid,sq,color))targets.push(sq);
     });
+    if(targets.length>=2&&targets.indexOf(target)>=0){hit=true;return true}
+    return false;
   });
   return hit;
 }
