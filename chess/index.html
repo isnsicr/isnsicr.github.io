@@ -114,7 +114,7 @@ function knightForkCountAfterMove(b,from,to,color){
   xy=sqxy(to);
   KNIGHT_DIRS.forEach(function(d){
     var sq=squareAt(xy[0]+d[0],xy[1]+d[1]),epc=sq&&nb[sq];
-    if(epc&&pieceColor(epc)===enemy)count++;
+    if(epc&&pieceColor(epc)===enemy&&legalCoverageAfterTargetTaken(nb,to,sq,color))count++;
   });
   return count;
 }
